@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de compras</title> 
     <link rel="stylesheet" href="./styles.css">
-    <script src="Day5.js"> </script>
+    
     
 </head>
 <body>
@@ -15,13 +15,18 @@
     <p id="parrafo"> Usted debe ingresar los elementos de su lista de compra </p>
     <p> Las categorias son: <br> 1- Frutas y verduras </br> 2- Lácteos</br>  5- Limpieza </br> 3- Congelados </br> 4- Dulces </br> 6- Almacén </p>
     <input placeholder="Ingrese el nombre aquí" id="ingreso_n"> 
-    <input  placeholder="Ingrese la categoria aquí (número)" id="ingreso_c"> 
+    <input  placeholder="Ingrese la categoria aquí (número)" id="ingreso_c">
+    <input placeholder="Ingrese el elemento a borrar" id="borrado" hidden> 
     </br> 
+
     <button onclick="agregarElemento()" > Agregar elemento</button>
     <button id="del" onclick="eliminarElemento()" disabled> Eliminar elemento </button>
-    <input placeholder="Ingrese el elemento a borrar" hidden id="borrado">
-    <button onclick="ejecutarPrograma()"> Listo </button>
+    <button id="listo" onclick="ejecutarPrograma()"> Listo </button>
+
+    </br>
     <p id="resultados"></p>
 
+
+    <script src="Day6.js"> </script> <!-- Para que se ejecute bien el DOM-->
 </body>
 </html>

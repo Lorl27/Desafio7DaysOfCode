@@ -22,6 +22,30 @@ let productos_ya_agregrados=[];
 let frutas_y_verduras=[],lacteos=[],congelados=[],dulces=[],limpieza=[],almacen=[];
 
 
+///----- control boton eliminar
+
+const botonDel=document.querySelector("#del");
+const inputBorrado = document.querySelector("#borrado");
+
+
+function actualizar_del_boton(){
+if (productos_ya_agregrados.length > 0) {
+    botonDel.removeAttribute("disabled");
+    inputBorrado.removeAttribute("hidden");
+    botonDel.style.backgroundColor="white";
+    inputBorrado.classList.add("active");
+} else {
+    botonDel.setAttribute("disabled", "true");
+    inputBorrado.setAttribute("hidden","true");
+    inputBorrado.classList.remove("active");
+    botonDel.style.backgroundColor="rgba(111, 111, 119, 0.512)";
+}}
+
+
+actualizar_del_boton();
+
+//----------------- VALIDACIONES
+
 function is_name_valid(nombre){
     return nombre.trim().length > 0; //no vacío
 }
@@ -122,34 +146,48 @@ function agregarElemento(){
     inputNombre.value="";
     inputCategoria.value="";
     
-
-    if(productos_ya_agregrados.length>0){
-        document.querySelector("#del").setAttribute("disable","true");
-    }
+    actualizar_del_boton();
 }
 
 
 function eliminarElemento(){
-    document.querySelector("borrado").setAttribute("hidden","false");
-    const elemento=document.getElementById("borrado");
+    const elemento=inputBorrado.value.trim();
 
     if(!is_name_valid(elemento)){
         show_message("ERROR. Debes ingresar un nombre válido para el producto.", "error");
-        marcarInputInvalido(elemento.value); 
+        marcarInputInvalido(inputBorrado); 
         return;
     }
     else{
-        marcarInputValido(elemento.value);
+        marcarInputValido(inputBorrado);
     }
 
     if(productos_ya_agregrados.includes(elemento)){
-    //eliminar elemento de ya_agregados
+    const indice=productos_ya_agregrados.indexOf(elemento);
+
+    productos_ya_agregrados.splice(indice,1); //elimina "1" elemnto en "indice"
+
     //eliminar elemento de la categoria correspondiente
+    const listas=[frutas_y_verduras,congelados,dulces,almacen,lacteos,limpieza];
+
+    listas.forEach(  (sublista) => {
+        const indice_indv= sublista.indexOf(elemento); 
+        if (indice_indv !== -1) {sublista.splice(indice_indv, 1);}
+    }   );
+
+
+    show_message("El elemento fue eliminado correctamente.","ok");
+
     }
     else{
         show_message("El elemento NO existe en tu lista.","error");
+        marcarInputInvalido(inputBorrado); 
+
     }
 
+    ejecutarPrograma(); //mostrar la lista
+
+    actualizar_del_boton();
 }
 
 function ejecutarPrograma(){
@@ -165,3 +203,8 @@ function ejecutarPrograma(){
     Almacén: ${almacen.join(", ")} `;
 
 }
+
+
+// console.log("Estado de productos_ya_agregados:", productos_ya_agregrados);
+// console.log("Estado del botón de eliminar:", botonDel.disabled ? "Deshabilitado" : "Habilitado");
+// console.log("Estado del input de eliminación:", inputBorrado.hidden ? "Oculto" : "Visible");

@@ -21,10 +21,15 @@ button{
     color:rgb(0, 0, 0);
     background-color: white;
     border:#3a0551 3px inset;
-    width:100px;
-    height:30px;
+    width:120px;
+    height:40px;
     margin: 10px;
     margin-top: 20px;
+}
+
+#listo{
+    margin: 2px;
+    padding: 2px;
 }
 
 button:hover{
@@ -41,4 +46,14 @@ input{
     margin-right: 10px;
     margin-left: 10px;
 }
+
+#borrado {
+    display: none;
+}
+
+#borrado.active {
+    display: inline-block;
+
+}
+
 
