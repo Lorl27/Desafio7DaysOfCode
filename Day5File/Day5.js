@@ -48,35 +48,57 @@ function show_message(mensaje,tipo="info"){
     txt.style.color=tipo === "error" ? "red" : "green";
 }
 
-// function clear_input(){
-//     rta_usu.value="";
-//     rta_usu_categoria.value="";
-// }
+
+
+//--- style:
+
+function marcarInputInvalido(input) {
+    input.style.border = "2px dashed red";
+}
+
+function marcarInputValido(input) {
+    input.style.border = "2px dashed green";
+}
+
+//-------
 
 function agregarElemento(){
-    const rta_usu=document.querySelector("#ingreso_n").value.trim(); //para borar espacios
-    const rta_usu_categoria=parseInt(document.querySelector("#ingreso_c").value);
+    const rta_usu = document.querySelector("#ingreso_n").value.trim(); //para borrar espacios
+    const rta_usu_categoria = parseInt(document.querySelector("#ingreso_c").value); 
+
+    const inputNombre = document.querySelector("#ingreso_n");
+    const inputCategoria = document.querySelector("#ingreso_c");
+
 
     //----- VALIDAR ENTRADAS:
 
-    if(!is_name_valid(rta_usu)){ 
+    if (!is_name_valid(rta_usu)) {
         show_message("ERROR. Debes ingresar un nombre válido para el producto.", "error");
-        return;}
+        marcarInputInvalido(inputNombre);
+        return;
+    } else {
+        marcarInputValido(inputNombre);
+    }
 
     if (is_category_invalid(rta_usu_categoria)) {
         show_message("ERROR. No has ingresado una categoría válida (1-6).", "error");
+        marcarInputInvalido(inputCategoria);
         return;
-    }
-
-    if(productos_ya_agregrados.includes(rta_usu)){
-        show_message(`ERROR. El producto "${rta_usu}" ya fue agregado anteriormente.`, "error");
-        return;
+    } else {
+        marcarInputValido(inputCategoria);
     }
     
 
     //---- Manejo de categorias:
 
-    productos_ya_agregrados.push(rta_usu);
+    if (productos_ya_agregrados.includes(rta_usu)) {
+        show_message(`ERROR. El producto "${rta_usu}" ya fue agregado anteriormente.`, "error");
+        marcarInputInvalido(inputNombre);
+        return;
+    } else {
+        productos_ya_agregrados.push(rta_usu);
+    }
+
 
     switch(rta_usu_categoria){
             case 1:
@@ -108,8 +130,12 @@ function agregarElemento(){
             return;
     }
 
+    //---- Limpiar input
+    inputNombre.value="";
+    inputCategoria.value="";
     
 }
+
 
 function ejecutarPrograma(){
     const texto = document.getElementById("resultados");
