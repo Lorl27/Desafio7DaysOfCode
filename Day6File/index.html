@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de compras</title> 
+    <link rel="stylesheet" href="./styles.css">
+    <script src="Day5.js"> </script>
+    
+</head>
+<body>
+    <hr style=" border: 5px double  blue; ">
+    <h1> ¡Bienvenidx!</h1>
+    <hr style=" border: 5px double  blue; ">
+    <p id="parrafo"> Usted debe ingresar los elementos de su lista de compra </p>
+    <p> Las categorias son: <br> 1- Frutas y verduras </br> 2- Lácteos</br>  5- Limpieza </br> 3- Congelados </br> 4- Dulces </br> 6- Almacén </p>
+    <input placeholder="Ingrese el nombre aquí" id="ingreso_n"> 
+    <input  placeholder="Ingrese la categoria aquí (número)" id="ingreso_c"> 
+    </br> 
+    <button onclick="agregarElemento()" > Agregar elemento</button>
+    <button id="del" onclick="eliminarElemento()" disabled> Eliminar elemento </button>
+    <input placeholder="Ingrese el elemento a borrar" hidden id="borrado">
+    <button onclick="ejecutarPrograma()"> Listo </button>
+    <p id="resultados"></p>
+
+</body>
+</html>
