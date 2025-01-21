@@ -34,23 +34,42 @@ let productos_ya_agregrados=[];
 let frutas_y_verduras=[],lacteos=[],congelados=[],dulces=[],limpieza=[],almacen=[];
 
 
+function is_name_valid(nombre){
+    return nombre.trim().length > 0; //no vacío
+}
+
+function is_category_invalid(cateogoria){
+    return isNaN(cateogoria) || cateogoria < 1 || cateogoria > 6;
+}
+
+function show_message(mensaje,tipo="info"){
+    const txt=document.querySelector("#parrafo");
+    txt.textContent=mensaje;
+    txt.style.color=tipo === "error" ? "red" : "green";
+}
+
+// function clear_input(){
+//     rta_usu.value="";
+//     rta_usu_categoria.value="";
+// }
+
 function agregarElemento(){
     const rta_usu=document.querySelector("#ingreso_n").value.trim(); //para borar espacios
     const rta_usu_categoria=parseInt(document.querySelector("#ingreso_c").value);
-    const mensaje=document.querySelector("#parrafo"); //por si hay que avisar errores/validar entrada.
 
     //----- VALIDAR ENTRADAS:
 
-    if(!rta_usu){ mensaje.textContent = "ERROR. Debes ingresar un nombre válido para el producto.";
+    if(!is_name_valid(rta_usu)){ 
+        show_message("ERROR. Debes ingresar un nombre válido para el producto.", "error");
         return;}
 
-    if (isNaN(rta_usu_categoria) || rta_usu_categoria < 1 || rta_usu_categoria > 6) { //si esta vacio el input o !e [1,6] de las categorias disponibles
-        mensaje.textContent = "ERROR. No has ingresado una categoría válida (1-6).";
+    if (is_category_invalid(rta_usu_categoria)) {
+        show_message("ERROR. No has ingresado una categoría válida (1-6).", "error");
         return;
     }
 
     if(productos_ya_agregrados.includes(rta_usu)){
-        mensaje.textContent=`ERROR. El producto "${rta_usu}" ya fue agregado anteriormente.`;
+        show_message(`ERROR. El producto "${rta_usu}" ya fue agregado anteriormente.`, "error");
         return;
     }
     
@@ -62,36 +81,39 @@ function agregarElemento(){
     switch(rta_usu_categoria){
             case 1:
             frutas_y_verduras.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Frutas y Verduras".`;
+            show_message(`Producto "${rta_usu}" agregado a la categoría Frutas y Verduras.`, "ok");
             break;
         case 2:
             lacteos.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Lácteos".`;
+            show_message(`Producto "${rta_usu}" agregado a la categoría "Lácteos".`,"ok");
             break;
         case 3:
             congelados.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Congelados".`;
+            show_message(`Producto "${rta_usu}" agregado a la categoría "Congelados".`,"ok");
             break;
         case 4:
             dulces.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Dulces".`;
+            show_message(`Producto "${rta_usu}" agregado a la categoría "Dulces".`,"ok");
             break;
         case 5:
             limpieza.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Limpieza".`;
+            show_message (`Producto "${rta_usu}" agregado a la categoría "Limpieza".`,"ok");
             break;
         case 6:
             almacen.push(rta_usu);
-            mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "Almacén".`;
+            show_message (`Producto "${rta_usu}" agregado a la categoría "Almacén".`,"ok");
             break;
         default:
-            mensaje.textContent = "ERROR. Ocurrió un error inesperado.";
+            show_message("ERROR. Ocurrió un error inesperado.","error")
+            return;
     }
+
+    
 }
 
 function ejecutarPrograma(){
     const texto = document.getElementById("resultados");
-
+    
     texto.innerHTML = `
     <strong>Lista de compras:</strong><br>
     Frutas y verduras: ${frutas_y_verduras.join(", ")}<br>
@@ -113,6 +135,7 @@ function ejecutarPrograma(){
 /* con diccionarios:
 
 let productos_ya_agregados = [];
+
 const categorias = {
     1: "frutas_y_verduras",
     2: "lacteos",
@@ -121,6 +144,7 @@ const categorias = {
     5: "limpieza",
     6: "almacen"
 };
+
 let inventario = {
     frutas_y_verduras: [],
     lacteos: [],
@@ -137,23 +161,28 @@ function agregarElemento() {
         return;
     }
 
-    // Verificar si el producto ya fue agregado
-    if (productos_ya_agregados.includes(rta_usu)) {
-        mensaje.textContent = "ERROR. Ya ingresaste ese producto.";
-        return;
-    }
-
-    // Agregar producto al inventario
     productos_ya_agregados.push(rta_usu);
-    const categoriaNombre = categorias[rta_usu_categoria];
-    inventario[categoriaNombre].push(rta_usu);
+    categorias[rta_usu_categoria].push(rta_usu);
+    show_message(`Producto "${rta_usu}" agregado a la categoría "${categorias[rta_usu_categoria].nombre}".`, "ok");
 
-    // Confirmar éxito
-    mensaje.textContent = `Producto "${rta_usu}" agregado a la categoría "${categoriaNombre}".`;
 }
 
 
+function ejecutarPrograma() {
+    let resultado = "<strong>Lista de compras:</strong><br>";
+    let hayProductos = false;
 
+    for (const categoria in categorias) {
+        if (categorias[categoria].productos.length > 0) {
+            hayProductos = true;
+            resultado += `${categorias[categoria].nombre}: ${categorias[categoria].productos.join(", ")}<br>`;
+        }
+    }
+
+    if (!hayProductos) { resultado = "No se han agregado productos a la lista."; }
+
+    document.getElementById("resultados").innerHTML = resultado;
+}
 
 
 
